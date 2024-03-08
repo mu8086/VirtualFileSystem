@@ -11,8 +11,8 @@ func init() {
 
 type FileCreate struct{}
 
-func (cmd FileCreate) Execute() {
-	return
+func (cmd FileCreate) Execute(args []string) error {
+	return nil
 }
 
 func (cmd FileCreate) Name() string {
@@ -23,6 +23,6 @@ func (cmd FileCreate) String() string {
 	return fmt.Sprintf("[%s]", cmd.Name())
 }
 
-func (cmd FileCreate) validate() bool {
-	return true
+func (cmd FileCreate) validate(args []string) error {
+	return nil
 }

@@ -1,15 +1,16 @@
 package cmds
 
 import (
+	"VirtualFileSystem/errors"
 	"fmt"
 	"os"
 )
 
 type Cmd interface {
-	Execute()
+	Execute([]string) error
 	Name() string
 	String() string
-	validate() bool
+	validate([]string) error
 }
 
 var cmds map[string]Cmd
@@ -30,20 +31,23 @@ func AvailableCmds() string {
 	for _, cmd := range cmds {
 		s += " " + cmd.String()
 	}
-	return s[1:]
+	if len(s) != 0 {
+		s = s[1:]
+	}
+	return s
 }
 
 func register(cmd Cmd) bool {
 	if cmd == nil {
-		fmt.Fprintf(os.Stderr, "register cmd failed: error argument.\n")
+		fmt.Fprintf(os.Stderr, "register: %v\n", errors.ErrCmdRegister)
 		return false
 	}
 
-	if _, exists := cmds[cmd.Name()]; !exists {
-		cmds[cmd.Name()] = cmd
-		return true
+	if _, exists := cmds[cmd.Name()]; exists {
+		fmt.Fprintf(os.Stderr, "register: %v\n", errors.ErrCmdExists)
+		return false
 	}
 
-	fmt.Fprintf(os.Stderr, "register cmd failed: already exists.\n")
-	return false
+	cmds[cmd.Name()] = cmd
+	return true
 }

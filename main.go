@@ -2,6 +2,8 @@ package main
 
 import (
 	"VirtualFileSystem/cmds"
+	"VirtualFileSystem/dao"
+	"VirtualFileSystem/errors"
 	"bufio"
 	"fmt"
 	"os"
@@ -23,6 +25,7 @@ func main() {
 	}
 }
 
+// TODO: implement error
 func parseCommand(input string) (string, []string, error) {
 	fields := strings.Fields(input)
 	if len(fields) == 0 {
@@ -34,18 +37,29 @@ func parseCommand(input string) (string, []string, error) {
 func handleCommand(input string) {
 	cmdName, args, err := parseCommand(input)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "parse command failed, err: %+v", err)
+		fmt.Fprintf(os.Stderr, "%v: %v\n", errors.ErrCmdParse, err)
+		return
+	} else if cmdName == "" { // empty line
+		return
+	}
+
+	// TODO: remove
+	if cmdName == "all" {
+		fmt.Printf("all user: %v\n", dao.GetAllUsers())
 		return
 	}
 
 	cmd := cmds.Get(cmdName)
 	if cmd == nil {
-		fmt.Fprintf(os.Stdout, "invalid command: %v\n", cmdName)
+		fmt.Fprintf(os.Stderr, "%v: %v\n", errors.ErrCmdNotFound, cmdName)
 		return
 	}
 
-	fmt.Fprintf(os.Stdout, "[accept] command: %v(%v), args: %v\n", cmdName, cmd.Name(), args)
-	cmd.Execute()
+	err = cmd.Execute(args)
+	if err != nil {
+		//fmt.Fprintf(os.Stderr, "command: '%v' encountered err: %v\n", cmdName, err)
+		return
+	}
 }
 
 func prompt() {
