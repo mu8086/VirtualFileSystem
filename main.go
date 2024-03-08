@@ -19,26 +19,32 @@ func main() {
 		prompt()
 	}
 	if err := lineScanner.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, "reading standard input:", err)
+		fmt.Fprintf(os.Stderr, "reading standard input: %v\n", err)
 	}
 }
 
-func handleCommand(input string) {
+func parseCommand(input string) (string, []string, error) {
 	fields := strings.Fields(input)
 	if len(fields) == 0 {
+		return "", nil, nil
+	}
+	return fields[0], fields[1:], nil
+}
+
+func handleCommand(input string) {
+	cmdName, args, err := parseCommand(input)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "parse command failed, err: %+v", err)
 		return
 	}
 
-	command := fields[0]
-	args := fields[1:]
-
-	cmd := cmds.Get(command)
+	cmd := cmds.Get(cmdName)
 	if cmd == nil {
-		fmt.Fprintf(os.Stdout, "invalid command: %v\n", command)
+		fmt.Fprintf(os.Stdout, "invalid command: %v\n", cmdName)
 		return
 	}
 
-	fmt.Fprintf(os.Stdout, "[accept] command: %v(%v), args: %v\n", command, cmd.Name(), args)
+	fmt.Fprintf(os.Stdout, "[accept] command: %v(%v), args: %v\n", cmdName, cmd.Name(), args)
 	cmd.Execute()
 }
 
