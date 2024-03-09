@@ -51,7 +51,7 @@ func (cmd FolderCreate) String() string {
 }
 
 func (cmd FolderCreate) Usage() {
-	fmt.Fprintf(os.Stdout, "Usage: %v [username] [foldername] [description]?\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [description]?\n", cmd.Name())
 }
 
 func (cmd FolderCreate) validate(args []string) error {
@@ -108,7 +108,7 @@ func (cmd FolderRename) String() string {
 }
 
 func (cmd FolderRename) Usage() {
-	fmt.Fprintf(os.Stdout, "Usage: %v [username] [foldername] [new-folder-name]\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [new-folder-name]\n", cmd.Name())
 }
 
 func (cmd FolderRename) validate(args []string) error {

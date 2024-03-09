@@ -45,7 +45,7 @@ func (cmd UserCreate) String() string {
 }
 
 func (cmd UserCreate) Usage() {
-	fmt.Fprintf(os.Stdout, "Usage: %v [username]\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username]\n", cmd.Name())
 }
 
 func (cmd UserCreate) validate(args []string) error {

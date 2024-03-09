@@ -25,7 +25,7 @@ func (cmd FileCreate) String() string {
 }
 
 func (cmd FileCreate) Usage() {
-	fmt.Fprintf(os.Stdout, "Usage: %v [username] [foldername] [filename] [description]?\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [filename] [description]?\n", cmd.Name())
 }
 
 func (cmd FileCreate) validate(args []string) error {
