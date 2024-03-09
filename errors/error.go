@@ -8,7 +8,7 @@ var (
 	ErrArgSize = stdErr.New("arg invalid size")
 
 	ErrCmdExists    = stdErr.New("command exists")
-	ErrCmdNotExists = stdErr.New("command not exists")
+	ErrCmdNotExists = stdErr.New("Unrecognized command")
 	ErrCmdParse     = stdErr.New("command parse failed")
 	ErrCmdRegister  = stdErr.New("command register failed")
 
