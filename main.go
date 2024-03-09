@@ -51,7 +51,7 @@ func handleCommand(input string) {
 
 	cmd := cmds.Get(cmdName)
 	if cmd == nil {
-		fmt.Fprintf(os.Stderr, "%v: %v\n", errors.ErrCmdNotFound, cmdName)
+		fmt.Fprintf(os.Stderr, "%v: %v\n", errors.ErrCmdNotExists, cmdName)
 		return
 	}
 
