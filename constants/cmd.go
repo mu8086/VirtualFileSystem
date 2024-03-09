@@ -6,9 +6,15 @@ var (
 	FileListCmd   = "list-files"
 
 	FolderCreateCmd = "create-folder"
-	FolderListCmd   = "list-folders"
+	FoldersListCmd  = "list-folders"
 	FolderRemoveCmd = "delete-folder"
 	FolderRenameCmd = "rename-folder"
 
 	UserCreateCmd = "register"
+
+	FlagSortAsc  = "asc"
+	FlagSortDesc = "desc"
+
+	OptionSortByName    = "--sort-name"
+	OptionSortByCreated = "--sort-created"
 )

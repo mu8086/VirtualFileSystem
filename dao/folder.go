@@ -26,6 +26,20 @@ func CreateFolder(userName, folderName, desc string) error {
 	return nil
 }
 
+func GetFolders(userName, sortOption, sortFlag string) (dto.Folders, error) {
+	user := GetUser(userName)
+	if user == nil {
+		return nil, errors.ErrUserNotExists
+	}
+
+	folders, err := user.Folders.Sort(sortOption, sortFlag)
+	if err != nil {
+		return nil, err
+	}
+
+	return folders, nil
+}
+
 func RemoveFolder(userName, folderName string) error {
 	user := GetUser(userName)
 	if user == nil {

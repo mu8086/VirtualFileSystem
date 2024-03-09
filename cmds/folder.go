@@ -11,6 +11,7 @@ import (
 
 func init() {
 	register(FolderCreate{})
+	register(FoldersList{})
 	register(FolderRemove{})
 	register(FolderRename{})
 }
@@ -69,6 +70,84 @@ func (cmd FolderCreate) validate(args []string) error {
 	} else if !common.ValidFolderName(folderName) {
 		fmt.Fprintf(os.Stderr, "Error: The %v contain invalid chars.\n", folderName)
 		return errors.ErrFolderName
+	}
+	return nil
+}
+
+type FoldersList struct{}
+
+func (cmd FoldersList) Execute(args []string) error {
+	// If neither --sort-name nor --sort-created is provided, sort the list by [foldername] in ascending order
+	if len(args) == 1 {
+		args = append(args, constants.OptionSortByName, constants.FlagSortAsc)
+	}
+
+	if err := cmd.validate(args); err != nil {
+		return err
+	}
+
+	userName, sortOption, sortFlag := args[0], args[1], args[2]
+
+	folders, err := dao.GetFolders(userName, sortOption, sortFlag)
+	if err != nil {
+		switch err {
+		case errors.ErrUserNotExists:
+			fmt.Fprintf(os.Stderr, "Error: The %v doesn't exist.\n", userName)
+		default:
+			fmt.Fprintf(os.Stderr, "Unknown Error: %v\n", err)
+		}
+		return err
+	} else if folders == nil || len(folders) == 0 {
+		fmt.Fprintf(os.Stderr, "Warning: The %v doesn't have any folders\n", userName)
+		return nil
+	}
+
+	for _, folder := range folders {
+		line := folder.Name
+
+		if len(folder.Description) != 0 {
+			line += " " + folder.Description
+		}
+
+		line += " " + folder.CreatedAt.Format("2006-01-02 15:04:05")
+		line += " " + userName
+
+		fmt.Fprintf(os.Stdout, "%v\n", line)
+	}
+	return nil
+}
+
+func (cmd FoldersList) Name() string {
+	return constants.FoldersListCmd
+}
+
+func (cmd FoldersList) String() string {
+	return fmt.Sprintf("[%s]", cmd.Name())
+}
+
+func (cmd FoldersList) Usage() {
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [%v|%v] [%v|%v]\n", cmd.Name(),
+		constants.OptionSortByName, constants.OptionSortByCreated,
+		constants.FlagSortAsc, constants.FlagSortDesc)
+}
+
+func (cmd FoldersList) validate(args []string) error {
+	if len(args) != 3 {
+		cmd.Usage()
+		return errors.ErrArgSize
+	}
+
+	userName, sortOption, sortFlag := args[0], args[1], args[2]
+
+	if !common.ValidUserName(userName) {
+		fmt.Fprintf(os.Stderr, "Error: The %v contain invalid chars.\n", userName)
+		return errors.ErrUserName
+	} else if !common.ValidSortOption(sortOption) {
+		cmd.Usage()
+		return errors.ErrSortOption
+	} else if !common.ValidSortFlag(sortFlag) {
+		cmd.Usage()
+		return errors.ErrSortFlag
 	}
 	return nil
 }

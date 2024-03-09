@@ -16,6 +16,9 @@ var (
 	ErrFolderName      = stdErr.New("folder name contains invalid chars")
 	ErrFolderNotExists = stdErr.New("folder not exists")
 
+	ErrSortFlag   = stdErr.New("sort flag not exists")
+	ErrSortOption = stdErr.New("sort option not exists")
+
 	ErrUserExists    = stdErr.New("user exists")
 	ErrUserName      = stdErr.New("user name contains invalid chars")
 	ErrUserNotExists = stdErr.New("user not exists")

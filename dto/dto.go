@@ -1,8 +1,10 @@
 package dto
 
 import (
+	"VirtualFileSystem/constants"
 	"VirtualFileSystem/errors"
 	"fmt"
+	"sort"
 	"time"
 )
 
@@ -35,6 +37,47 @@ func (folders Folders) Get(folderName string) *Folder {
 		}
 	}
 	return nil
+}
+
+func (folders Folders) Sort(sortOption, sortFlag string) (Folders, error) {
+	if len(folders) == 0 {
+		return nil, nil
+	}
+
+	sorted := append(Folders{}, folders...)
+
+	switch sortOption {
+	case constants.OptionSortByName:
+		if sortFlag == constants.FlagSortAsc {
+			sort.Slice(sorted, func(i, j int) bool {
+				return sorted[i].Name < sorted[j].Name
+			})
+			return sorted, nil
+		} else if sortFlag == constants.FlagSortDesc {
+			sort.Slice(sorted, func(i, j int) bool {
+				return sorted[i].Name > sorted[j].Name
+			})
+			return sorted, nil
+		}
+		return nil, errors.ErrSortFlag
+
+	case constants.OptionSortByCreated:
+		if sortFlag == constants.FlagSortAsc {
+			sort.Slice(sorted, func(i, j int) bool {
+				return sorted[i].CreatedAt.Before(sorted[j].CreatedAt)
+			})
+			return sorted, nil
+		} else if sortFlag == constants.FlagSortDesc {
+			sort.Slice(sorted, func(i, j int) bool {
+				return sorted[i].CreatedAt.After(sorted[j].CreatedAt)
+			})
+			return sorted, nil
+		}
+		return nil, errors.ErrSortFlag
+
+	default:
+		return nil, errors.ErrSortOption
+	}
 }
 
 func (folders Folders) Remove(folderName string) (Folders, error) {
