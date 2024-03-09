@@ -2,6 +2,7 @@ package dao
 
 import (
 	"VirtualFileSystem/dto"
+	"VirtualFileSystem/errors"
 	"fmt"
 )
 
@@ -11,11 +12,15 @@ func init() {
 	users = make(map[string]*dto.User)
 }
 
-func CreateUser(name string) bool {
+func CreateUser(name string) error {
+	if GetUser(name) != nil {
+		return errors.ErrUserExists
+	}
+
 	users[name] = &dto.User{
 		Name: name,
 	}
-	return true
+	return nil
 }
 
 // TODO: remove

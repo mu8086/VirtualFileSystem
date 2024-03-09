@@ -26,9 +26,16 @@ func (cmd FolderCreate) Execute(args []string) error {
 		desc = args[2]
 	}
 
-	if !dao.CreateFolder(userName, folderName, desc) {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", errors.ErrUnknown)
-		return errors.ErrUnknown
+	if err := dao.CreateFolder(userName, folderName, desc); err != nil {
+		switch err {
+		case errors.ErrUserNotExists:
+			fmt.Fprintf(os.Stderr, "Error: The %v doesn't exist.\n", userName)
+		case errors.ErrFolderExists:
+			fmt.Fprintf(os.Stderr, "Error: The %v has already existed.\n", folderName)
+		default:
+			fmt.Fprintf(os.Stderr, "Unknown Error: %v\n", err)
+		}
+		return err
 	}
 
 	fmt.Fprintf(os.Stdout, "Create %s successfully.\n", folderName)
@@ -62,15 +69,6 @@ func (cmd FolderCreate) validate(args []string) error {
 		fmt.Fprintf(os.Stderr, "Error: The %v contain invalid chars.\n", folderName)
 		return errors.ErrFolderName
 	}
-
-	if dao.GetUser(userName) == nil {
-		fmt.Fprintf(os.Stderr, "Error: The %v doesn't exist.\n", userName)
-		return errors.ErrUserNotExists
-	} else if dao.GetUserFolder(userName, folderName) != nil {
-		fmt.Fprintf(os.Stderr, "Error: The %v has already existed.\n", folderName)
-		return errors.ErrFolderExists
-	}
-
 	return nil
 }
 
@@ -92,7 +90,7 @@ func (cmd FolderRename) Execute(args []string) error {
 		case errors.ErrFolderExists:
 			fmt.Fprintf(os.Stderr, "Error: The %v has already existed.\n", newFolderName)
 		default:
-			fmt.Fprintf(os.Stderr, "Error: %v\n", errors.ErrUnknown)
+			fmt.Fprintf(os.Stderr, "Unknown Error: %v\n", err)
 		}
 		return err
 	}

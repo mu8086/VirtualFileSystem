@@ -6,10 +6,15 @@ import (
 	"time"
 )
 
-func CreateFolder(userName, folderName, desc string) bool {
+func CreateFolder(userName, folderName, desc string) error {
 	user := GetUser(userName)
 	if user == nil {
-		return false
+		return errors.ErrUserNotExists
+	}
+
+	folder := user.Folders.Get(folderName)
+	if folder != nil {
+		return errors.ErrFolderExists
 	}
 
 	user.Folders = append(user.Folders, &dto.Folder{
@@ -18,8 +23,7 @@ func CreateFolder(userName, folderName, desc string) bool {
 		Description: desc,
 		Files:       nil,
 	})
-
-	return true
+	return nil
 }
 
 func UpdateFolder(userName, folderName, newFolderName string) error {

@@ -21,9 +21,15 @@ func (cmd UserCreate) Execute(args []string) error {
 	}
 
 	name := args[0]
-	if !dao.CreateUser(name) {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", errors.ErrUnknown)
-		return errors.ErrUnknown
+
+	if err := dao.CreateUser(name); err != nil {
+		switch err {
+		case errors.ErrUserExists:
+			fmt.Fprintf(os.Stderr, "Error: The %v has already existed.\n", name)
+		default:
+			fmt.Fprintf(os.Stderr, "Unknown Error: %v\n", err)
+		}
+		return err
 	}
 
 	fmt.Fprintf(os.Stdout, "Add %s successfully.\n", name)
@@ -52,10 +58,6 @@ func (cmd UserCreate) validate(args []string) error {
 	if !common.ValidUserName(name) {
 		fmt.Fprintf(os.Stderr, "Error: The %v contain invalid chars.\n", name)
 		return errors.ErrUserName
-	} else if dao.GetUser(name) != nil {
-		fmt.Fprintf(os.Stderr, "Error: The %v has already existed.\n", name)
-		return errors.ErrUserExists
 	}
-
 	return nil
 }
