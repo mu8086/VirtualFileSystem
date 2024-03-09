@@ -98,7 +98,7 @@ func (cmd FoldersList) Execute(args []string) error {
 		}
 		return err
 	} else if folders == nil || len(folders) == 0 {
-		fmt.Fprintf(os.Stderr, "Warning: The %v doesn't have any folders\n", userName)
+		fmt.Fprintf(os.Stdout, "Warning: The %v doesn't have any folders\n", userName)
 		return nil
 	}
 
