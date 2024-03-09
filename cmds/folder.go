@@ -42,9 +42,13 @@ func (cmd FolderCreate) String() string {
 	return fmt.Sprintf("[%s]", cmd.Name())
 }
 
+func (cmd FolderCreate) Usage() {
+	fmt.Fprintf(os.Stdout, "Usage: %v [username] [foldername] [description]?\n", cmd.Name())
+}
+
 func (cmd FolderCreate) validate(args []string) error {
 	if len(args) != 2 && len(args) != 3 {
-		fmt.Fprintf(os.Stderr, "Error: %v: %v\n", errors.ErrArgSize, len(args))
+		cmd.Usage()
 		return errors.ErrArgSize
 	}
 

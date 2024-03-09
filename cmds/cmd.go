@@ -10,6 +10,7 @@ type Cmd interface {
 	Execute([]string) error
 	Name() string
 	String() string
+	Usage()
 	validate([]string) error
 }
 

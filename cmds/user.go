@@ -38,9 +38,13 @@ func (cmd UserCreate) String() string {
 	return fmt.Sprintf("[%s]", cmd.Name())
 }
 
+func (cmd UserCreate) Usage() {
+	fmt.Fprintf(os.Stdout, "Usage: %v [username]\n", cmd.Name())
+}
+
 func (cmd UserCreate) validate(args []string) error {
 	if len(args) != 1 {
-		fmt.Fprintf(os.Stderr, "Error: %v: %v\n", errors.ErrArgSize, len(args))
+		cmd.Usage()
 		return errors.ErrArgSize
 	}
 

@@ -3,6 +3,7 @@ package cmds
 import (
 	"VirtualFileSystem/constants"
 	"fmt"
+	"os"
 )
 
 func init() {
@@ -21,6 +22,10 @@ func (cmd FileCreate) Name() string {
 
 func (cmd FileCreate) String() string {
 	return fmt.Sprintf("[%s]", cmd.Name())
+}
+
+func (cmd FileCreate) Usage() {
+	fmt.Fprintf(os.Stdout, "Usage: %v [username] [foldername] [filename] [description]?\n", cmd.Name())
 }
 
 func (cmd FileCreate) validate(args []string) error {
