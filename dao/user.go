@@ -36,3 +36,10 @@ func GetUser(name string) *dto.User {
 	}
 	return nil
 }
+
+func GetUserFolder(userName, folderName string) *dto.Folder {
+	if user := GetUser(userName); user != nil {
+		return user.Folders.Get(folderName)
+	}
+	return nil
+}

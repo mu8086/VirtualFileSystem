@@ -7,26 +7,39 @@ import (
 
 type User struct {
 	Name    string
-	Folders []*Folder
+	Folders Folders
 }
 
 func (u User) String() string {
-	return fmt.Sprintf("[User: %v:[%v]]", u.Name, u.Folders)
+	return fmt.Sprintf("[User: %v, Folders: %v]", u.Name, u.Folders)
 }
 
 type Folder struct {
-	createdAt time.Time
-	Name      string
-	Files     []*File
+	CreatedAt   time.Time
+	Description string
+	Files       []*File
+	Name        string
 }
 
 func (f Folder) String() string {
-	return fmt.Sprintf("[Folder: %v, createdAt: %v, Files: %v]", f.Name, f.createdAt, f.Files)
+	return fmt.Sprintf("[Folder: %v, Desc: %v, CreatedAt: %v, Files: %v]", f.Name, f.Description, f.CreatedAt, f.Files)
+}
+
+type Folders []*Folder
+
+func (folders Folders) Get(folderName string) *Folder {
+	for _, folder := range folders {
+		if folder.Name == folderName {
+			return folder
+		}
+	}
+	return nil
 }
 
 type File struct {
-	createdAt time.Time
-	Name      string
+	createdAt   time.Time
+	Description string
+	Name        string
 }
 
 func (f File) String() string {
