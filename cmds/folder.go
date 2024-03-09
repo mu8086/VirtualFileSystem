@@ -11,6 +11,7 @@ import (
 
 func init() {
 	register(FolderCreate{})
+	register(FolderRemove{})
 	register(FolderRename{})
 }
 
@@ -56,6 +57,61 @@ func (cmd FolderCreate) Usage() {
 
 func (cmd FolderCreate) validate(args []string) error {
 	if len(args) != 2 && len(args) != 3 {
+		cmd.Usage()
+		return errors.ErrArgSize
+	}
+
+	userName, folderName := args[0], args[1]
+
+	if !common.ValidUserName(userName) {
+		fmt.Fprintf(os.Stderr, "Error: The %v contain invalid chars.\n", userName)
+		return errors.ErrUserName
+	} else if !common.ValidFolderName(folderName) {
+		fmt.Fprintf(os.Stderr, "Error: The %v contain invalid chars.\n", folderName)
+		return errors.ErrFolderName
+	}
+	return nil
+}
+
+type FolderRemove struct{}
+
+func (cmd FolderRemove) Execute(args []string) error {
+	if err := cmd.validate(args); err != nil {
+		return err
+	}
+
+	userName, folderName := args[0], args[1]
+
+	if err := dao.RemoveFolder(userName, folderName); err != nil {
+		switch err {
+		case errors.ErrUserNotExists:
+			fmt.Fprintf(os.Stderr, "Error: The %v doesn't exist.\n", userName)
+		case errors.ErrFolderNotExists:
+			fmt.Fprintf(os.Stderr, "Error: The %v doesn't exist.\n", folderName)
+		default:
+			fmt.Fprintf(os.Stderr, "Unknown Error: %v\n", err)
+		}
+		return err
+	}
+
+	fmt.Fprintf(os.Stdout, "Delete %v successfully.\n", folderName)
+	return nil
+}
+
+func (cmd FolderRemove) Name() string {
+	return constants.FolderRemoveCmd
+}
+
+func (cmd FolderRemove) String() string {
+	return fmt.Sprintf("[%s]", cmd.Name())
+}
+
+func (cmd FolderRemove) Usage() {
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername]\n", cmd.Name())
+}
+
+func (cmd FolderRemove) validate(args []string) error {
+	if len(args) != 2 {
 		cmd.Usage()
 		return errors.ErrArgSize
 	}

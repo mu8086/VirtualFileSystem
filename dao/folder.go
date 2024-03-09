@@ -26,6 +26,21 @@ func CreateFolder(userName, folderName, desc string) error {
 	return nil
 }
 
+func RemoveFolder(userName, folderName string) error {
+	user := GetUser(userName)
+	if user == nil {
+		return errors.ErrUserNotExists
+	}
+
+	folders, err := user.Folders.Remove(folderName)
+	if err != nil {
+		return err
+	}
+
+	user.Folders = folders
+	return nil
+}
+
 func UpdateFolder(userName, folderName, newFolderName string) error {
 	user := GetUser(userName)
 	if user == nil {

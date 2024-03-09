@@ -1,6 +1,7 @@
 package dto
 
 import (
+	"VirtualFileSystem/errors"
 	"fmt"
 	"time"
 )
@@ -34,6 +35,15 @@ func (folders Folders) Get(folderName string) *Folder {
 		}
 	}
 	return nil
+}
+
+func (folders Folders) Remove(folderName string) (Folders, error) {
+	for idx, folder := range folders {
+		if folder.Name == folderName {
+			return append(folders[:idx], folders[idx+1:]...), nil
+		}
+	}
+	return nil, errors.ErrFolderNotExists
 }
 
 type File struct {
