@@ -134,6 +134,4 @@ func (cmd FileRemove) validate(args []string) error {
 		return errors.ErrFileName
 	}
 	return nil
-
-	return nil
 }
