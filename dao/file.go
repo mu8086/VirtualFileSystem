@@ -29,3 +29,23 @@ func CreateFile(userName, folderName, fileName, desc string) error {
 	})
 	return nil
 }
+
+func RemoveFile(userName, folderName, fileName string) error {
+	user := GetUser(userName)
+	if user == nil {
+		return errors.ErrUserNotExists
+	}
+
+	folder := user.Folders.Get(folderName)
+	if folder == nil {
+		return errors.ErrFolderNotExists
+	}
+
+	files, err := folder.Files.Remove(fileName)
+	if err != nil {
+		return err
+	}
+
+	folder.Files = files
+	return nil
+}

@@ -20,7 +20,7 @@ func (u User) String() string {
 type Folder struct {
 	CreatedAt   time.Time
 	Description string
-	Files       []*File
+	Files       Files
 	Name        string
 }
 
@@ -106,4 +106,15 @@ type File struct {
 
 func (f File) String() string {
 	return fmt.Sprintf("[File: %v, Desc: %v, createdAt: %v]", f.Name, f.Description, f.CreatedAt)
+}
+
+type Files []*File
+
+func (files Files) Remove(fileName string) (Files, error) {
+	for idx, file := range files {
+		if file.Name == fileName {
+			return append(files[:idx], files[idx+1:]...), nil
+		}
+	}
+	return nil, errors.ErrFileNotExists
 }
