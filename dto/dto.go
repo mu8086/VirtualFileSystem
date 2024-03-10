@@ -24,6 +24,15 @@ type Folder struct {
 	Name        string
 }
 
+func (f Folder) Get(fileName string) *File {
+	for _, file := range f.Files {
+		if file.Name == fileName {
+			return file
+		}
+	}
+	return nil
+}
+
 func (f Folder) String() string {
 	return fmt.Sprintf("[Folder: %v, Desc: %v, CreatedAt: %v, Files: %v]", f.Name, f.Description, f.CreatedAt, f.Files)
 }
@@ -90,11 +99,11 @@ func (folders Folders) Remove(folderName string) (Folders, error) {
 }
 
 type File struct {
-	createdAt   time.Time
+	CreatedAt   time.Time
 	Description string
 	Name        string
 }
 
 func (f File) String() string {
-	return fmt.Sprintf("[File: %v, createdAt: %v]", f.Name, f.createdAt)
+	return fmt.Sprintf("[File: %v, Desc: %v, createdAt: %v]", f.Name, f.Description, f.CreatedAt)
 }
