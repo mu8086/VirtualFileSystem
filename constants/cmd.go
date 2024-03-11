@@ -1,6 +1,8 @@
 package constants
 
 var (
+	CmdsList = "list-commands"
+
 	FileCreateCmd = "create-file"
 	FileRemoveCmd = "delete-file"
 	FilesListCmd  = "list-files"

@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	fmt.Printf("available cmds: %v\n", cmds.AvailableCmds())
+	fmt.Printf("%v\n", cmds.AvailableCmds())
 
 	lineScanner := bufio.NewScanner(os.Stdin)
 
@@ -46,6 +46,10 @@ func handleCommand(input string) {
 	// TODO: remove
 	if cmdName == "all" {
 		fmt.Printf("all user: %v\n", dao.GetAllUsers())
+		return
+	}
+	if cmdName == "list-commands" {
+		fmt.Fprintf(os.Stdout, "%v\n", cmds.AvailableCmds())
 		return
 	}
 

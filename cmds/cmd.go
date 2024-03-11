@@ -1,6 +1,7 @@
 package cmds
 
 import (
+	"VirtualFileSystem/constants"
 	"VirtualFileSystem/errors"
 	"fmt"
 	"os"
@@ -18,6 +19,8 @@ var cmds map[string]Cmd
 
 func init() {
 	cmds = make(map[string]Cmd)
+
+	register(CmdsList{})
 }
 
 func Get(cmdName string) Cmd {
@@ -30,12 +33,12 @@ func Get(cmdName string) Cmd {
 func AvailableCmds() string {
 	s := ""
 	for _, cmd := range cmds {
-		s += " " + cmd.String()
+		s += fmt.Sprintf(" [%v]", cmd)
 	}
 	if len(s) != 0 {
 		s = s[1:]
 	}
-	return s
+	return "Available Commands: " + s
 }
 
 func register(cmd Cmd) bool {
@@ -44,11 +47,33 @@ func register(cmd Cmd) bool {
 		return false
 	}
 
-	if _, exists := cmds[cmd.Name()]; exists {
+	if _, exists := cmds[cmd.String()]; exists {
 		fmt.Fprintf(os.Stderr, "register: %v\n", errors.ErrCmdExists)
 		return false
 	}
 
-	cmds[cmd.Name()] = cmd
+	cmds[cmd.String()] = cmd
 	return true
+}
+
+type CmdsList struct{}
+
+func (cmd CmdsList) Execute(args []string) error {
+	return nil
+}
+
+func (cmd CmdsList) Name() string {
+	return cmd.String()
+}
+
+func (cmd CmdsList) String() string {
+	return constants.CmdsList
+}
+
+func (cmd CmdsList) Usage() {
+
+}
+
+func (cmd CmdsList) validate(args []string) error {
+	return nil
 }
