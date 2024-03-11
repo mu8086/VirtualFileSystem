@@ -46,16 +46,12 @@ func (cmd FileCreate) Execute(args []string) error {
 	return nil
 }
 
-func (cmd FileCreate) Name() string {
+func (cmd FileCreate) String() string {
 	return constants.FileCreateCmd
 }
 
-func (cmd FileCreate) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd FileCreate) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [filename] [description]?\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [filename] [description]?\n", cmd)
 }
 
 func (cmd FileCreate) validate(args []string) error {
@@ -105,16 +101,12 @@ func (cmd FileRemove) Execute(args []string) error {
 	return nil
 }
 
-func (cmd FileRemove) Name() string {
+func (cmd FileRemove) String() string {
 	return constants.FileRemoveCmd
 }
 
-func (cmd FileRemove) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd FileRemove) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [filename]\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [filename]\n", cmd)
 }
 
 func (cmd FileRemove) validate(args []string) error {
@@ -175,16 +167,12 @@ func (cmd FilesList) Execute(args []string) error {
 	return nil
 }
 
-func (cmd FilesList) Name() string {
+func (cmd FilesList) String() string {
 	return constants.FilesListCmd
 }
 
-func (cmd FilesList) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd FilesList) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [%v|%v] [%v|%v]\n", cmd.Name(),
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [%v|%v] [%v|%v]\n", cmd,
 		constants.OptionSortByName, constants.OptionSortByCreated,
 		constants.FlagSortAsc, constants.FlagSortDesc)
 }

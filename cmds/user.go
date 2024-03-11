@@ -36,16 +36,12 @@ func (cmd UserCreate) Execute(args []string) error {
 	return nil
 }
 
-func (cmd UserCreate) Name() string {
+func (cmd UserCreate) String() string {
 	return constants.UserCreateCmd
 }
 
-func (cmd UserCreate) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd UserCreate) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username]\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username]\n", cmd)
 }
 
 func (cmd UserCreate) validate(args []string) error {

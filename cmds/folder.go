@@ -45,16 +45,12 @@ func (cmd FolderCreate) Execute(args []string) error {
 	return nil
 }
 
-func (cmd FolderCreate) Name() string {
+func (cmd FolderCreate) String() string {
 	return constants.FolderCreateCmd
 }
 
-func (cmd FolderCreate) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd FolderCreate) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [description]?\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [description]?\n", cmd)
 }
 
 func (cmd FolderCreate) validate(args []string) error {
@@ -111,16 +107,12 @@ func (cmd FoldersList) Execute(args []string) error {
 	return nil
 }
 
-func (cmd FoldersList) Name() string {
+func (cmd FoldersList) String() string {
 	return constants.FoldersListCmd
 }
 
-func (cmd FoldersList) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd FoldersList) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username] [%v|%v] [%v|%v]\n", cmd.Name(),
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [%v|%v] [%v|%v]\n", cmd,
 		constants.OptionSortByName, constants.OptionSortByCreated,
 		constants.FlagSortAsc, constants.FlagSortDesc)
 }
@@ -171,16 +163,12 @@ func (cmd FolderRemove) Execute(args []string) error {
 	return nil
 }
 
-func (cmd FolderRemove) Name() string {
+func (cmd FolderRemove) String() string {
 	return constants.FolderRemoveCmd
 }
 
-func (cmd FolderRemove) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd FolderRemove) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername]\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername]\n", cmd)
 }
 
 func (cmd FolderRemove) validate(args []string) error {
@@ -228,16 +216,12 @@ func (cmd FolderRename) Execute(args []string) error {
 	return nil
 }
 
-func (cmd FolderRename) Name() string {
+func (cmd FolderRename) String() string {
 	return constants.FolderRenameCmd
 }
 
-func (cmd FolderRename) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd FolderRename) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [new-folder-name]\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername] [new-folder-name]\n", cmd)
 }
 
 func (cmd FolderRename) validate(args []string) error {

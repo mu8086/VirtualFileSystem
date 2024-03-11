@@ -9,7 +9,6 @@ import (
 
 type Cmd interface {
 	Execute([]string) error
-	Name() string
 	String() string
 	Usage()
 	validate([]string) error
@@ -60,10 +59,6 @@ type CmdsList struct{}
 
 func (cmd CmdsList) Execute(args []string) error {
 	return nil
-}
-
-func (cmd CmdsList) Name() string {
-	return cmd.String()
 }
 
 func (cmd CmdsList) String() string {

@@ -21,20 +21,16 @@ func (cmd Mock) Execute(args []string) error {
 	arg0, arg1 := args[0], args[1]
 	fmt.Fprintf(os.Stdout, "arg0: %v, arg1: %v\n", arg0, arg1)
 
-	fmt.Fprintf(os.Stdout, "Execute %v successfully.\n", cmd.Name())
+	fmt.Fprintf(os.Stdout, "Execute %v successfully.\n", cmd)
 	return nil
 }
 
-func (cmd Mock) Name() string {
+func (cmd Mock) String() string {
 	return "MockCmd"
 }
 
-func (cmd Mock) String() string {
-	return fmt.Sprintf("[%s]", cmd.Name())
-}
-
 func (cmd Mock) Usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername]\n", cmd.Name())
+	fmt.Fprintf(os.Stderr, "Usage: %v [username] [foldername]\n", cmd)
 }
 
 func (cmd Mock) validate(args []string) error {
