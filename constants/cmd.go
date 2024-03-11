@@ -3,7 +3,7 @@ package constants
 var (
 	FileCreateCmd = "create-file"
 	FileRemoveCmd = "delete-file"
-	FileListCmd   = "list-files"
+	FilesListCmd  = "list-files"
 
 	FolderCreateCmd = "create-folder"
 	FoldersListCmd  = "list-folders"

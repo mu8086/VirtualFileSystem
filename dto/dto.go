@@ -110,6 +110,60 @@ func (f File) String() string {
 
 type Files []*File
 
+func (files Files) Sort(sortOption, sortFlag string) (Files, error) {
+	if len(files) == 0 {
+		return nil, nil
+	}
+
+	sorted := append(Files{}, files...)
+
+	switch sortOption {
+	case constants.OptionSortByName:
+		if sortFlag == constants.FlagSortAsc {
+			sort.Slice(sorted, func(i, j int) bool {
+				return sorted[i].Name < sorted[j].Name
+			})
+			return sorted, nil
+		} else if sortFlag == constants.FlagSortDesc {
+			sort.Slice(sorted, func(i, j int) bool {
+				return sorted[i].Name > sorted[j].Name
+			})
+			return sorted, nil
+		}
+		return nil, errors.ErrSortFlag
+
+	case constants.OptionSortByCreated:
+		if sortFlag == constants.FlagSortAsc {
+			sort.Slice(sorted, func(i, j int) bool {
+				return sorted[i].CreatedAt.Before(sorted[j].CreatedAt)
+			})
+			return sorted, nil
+		} else if sortFlag == constants.FlagSortDesc {
+			sort.Slice(sorted, func(i, j int) bool {
+				return sorted[i].CreatedAt.After(sorted[j].CreatedAt)
+			})
+			return sorted, nil
+		}
+		return nil, errors.ErrSortFlag
+
+	default:
+		return nil, errors.ErrSortOption
+	}
+}
+
+func (files Files) String() (s string) {
+	for _, file := range files {
+		line := file.Name
+
+		if len(file.Description) != 0 {
+			line += " " + file.Description
+		}
+
+		s += fmt.Sprintf("%v %v\n", line, file.CreatedAt.Format("2006-01-02 15:04:05"))
+	}
+	return s
+}
+
 func (files Files) Remove(fileName string) (Files, error) {
 	for idx, file := range files {
 		if file.Name == fileName {

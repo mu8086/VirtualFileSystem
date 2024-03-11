@@ -30,6 +30,25 @@ func CreateFile(userName, folderName, fileName, desc string) error {
 	return nil
 }
 
+func GetFiles(userName, folderName, sortOption, sortFlag string) (dto.Files, error) {
+	user := GetUser(userName)
+	if user == nil {
+		return nil, errors.ErrUserNotExists
+	}
+
+	folder := user.Folders.Get(folderName)
+	if folder == nil {
+		return nil, errors.ErrFolderNotExists
+	}
+
+	files, err := folder.Files.Sort(sortOption, sortFlag)
+	if err != nil {
+		return nil, err
+	}
+
+	return files, nil
+}
+
 func RemoveFile(userName, folderName, fileName string) error {
 	user := GetUser(userName)
 	if user == nil {
