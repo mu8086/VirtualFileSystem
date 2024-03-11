@@ -5,6 +5,7 @@ import (
 	"VirtualFileSystem/errors"
 	"fmt"
 	"os"
+	"sort"
 )
 
 type Cmd interface {
@@ -15,6 +16,7 @@ type Cmd interface {
 }
 
 var cmds map[string]Cmd
+var cmdsStr string
 
 func init() {
 	cmds = make(map[string]Cmd)
@@ -30,14 +32,22 @@ func Get(cmdName string) Cmd {
 }
 
 func AvailableCmds() string {
-	s := ""
-	for _, cmd := range cmds {
-		s += fmt.Sprintf(" [%v]", cmd)
+	if len(cmdsStr) == 0 {
+		slice := []string{}
+		for _, cmd := range cmds {
+			slice = append(slice, cmd.String())
+		}
+
+		sort.Strings(slice)
+		for _, cmd := range slice {
+			cmdsStr += fmt.Sprintf(" [%v]", cmd)
+		}
+
+		if len(cmdsStr) > 0 {
+			cmdsStr = cmdsStr[1:]
+		}
 	}
-	if len(s) != 0 {
-		s = s[1:]
-	}
-	return "Available Commands: " + s
+	return "Available Commands: " + cmdsStr
 }
 
 func register(cmd Cmd) bool {
@@ -58,6 +68,7 @@ func register(cmd Cmd) bool {
 type CmdsList struct{}
 
 func (cmd CmdsList) Execute(args []string) error {
+	fmt.Fprintf(os.Stdout, "%v\n", AvailableCmds())
 	return nil
 }
 

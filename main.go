@@ -48,10 +48,6 @@ func handleCommand(input string) {
 		fmt.Printf("all user: %v\n", dao.GetAllUsers())
 		return
 	}
-	if cmdName == "list-commands" {
-		fmt.Fprintf(os.Stdout, "%v\n", cmds.AvailableCmds())
-		return
-	}
 
 	cmd := cmds.Get(cmdName)
 	if cmd == nil {
