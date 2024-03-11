@@ -89,6 +89,19 @@ func (folders Folders) Sort(sortOption, sortFlag string) (Folders, error) {
 	}
 }
 
+func (folders Folders) String() (s string) {
+	for _, folder := range folders {
+		s += folder.Name
+
+		if len(folder.Description) != 0 {
+			s += " " + folder.Description
+		}
+
+		s += fmt.Sprintf(" %v\n", folder.CreatedAt.Format("2006-01-02 15:04:05"))
+	}
+	return s
+}
+
 func (folders Folders) Remove(folderName string) (Folders, error) {
 	for idx, folder := range folders {
 		if folder.Name == folderName {
@@ -153,13 +166,13 @@ func (files Files) Sort(sortOption, sortFlag string) (Files, error) {
 
 func (files Files) String() (s string) {
 	for _, file := range files {
-		line := file.Name
+		s += file.Name
 
 		if len(file.Description) != 0 {
-			line += " " + file.Description
+			s += " " + file.Description
 		}
 
-		s += fmt.Sprintf("%v %v\n", line, file.CreatedAt.Format("2006-01-02 15:04:05"))
+		s += fmt.Sprintf(" %v\n", file.CreatedAt.Format("2006-01-02 15:04:05"))
 	}
 	return s
 }

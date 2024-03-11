@@ -7,6 +7,7 @@ import (
 	"VirtualFileSystem/errors"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func init() {
@@ -88,7 +89,7 @@ func (cmd FoldersList) Execute(args []string) error {
 
 	userName, sortOption, sortFlag := args[0], args[1], args[2]
 
-	folders, err := dao.GetFolders(userName, sortOption, sortFlag)
+	sortedFolders, err := dao.GetFolders(userName, sortOption, sortFlag)
 	if err != nil {
 		switch err {
 		case errors.ErrUserNotExists:
@@ -97,23 +98,16 @@ func (cmd FoldersList) Execute(args []string) error {
 			fmt.Fprintf(os.Stderr, "Unknown Error: %v\n", err)
 		}
 		return err
-	} else if folders == nil || len(folders) == 0 {
-		fmt.Fprintf(os.Stdout, "Warning: The %v doesn't have any folders\n", userName)
+	} else if sortedFolders == nil || len(sortedFolders) == 0 {
+		fmt.Fprintf(os.Stdout, "Warning: The %v doesn't have any folders.\n", userName)
 		return nil
 	}
 
-	for _, folder := range folders {
-		line := folder.Name
+	fmt.Fprintf(os.Stdout, "%v", strings.ReplaceAll(
+		sortedFolders.String(),
+		"\n",
+		fmt.Sprintf(" %v\n", userName)))
 
-		if len(folder.Description) != 0 {
-			line += " " + folder.Description
-		}
-
-		line += " " + folder.CreatedAt.Format("2006-01-02 15:04:05")
-		line += " " + userName
-
-		fmt.Fprintf(os.Stdout, "%v\n", line)
-	}
 	return nil
 }
 
