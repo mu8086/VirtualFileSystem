@@ -28,6 +28,10 @@ func (cmd FileCreate) Execute(args []string) error {
 		desc = args[3]
 	}
 
+	userName = strings.ToLower(userName)
+	folderName = strings.ToLower(folderName)
+	fileName = strings.ToLower(fileName)
+
 	if err := dao.CreateFile(userName, folderName, fileName, desc); err != nil {
 		switch err {
 		case errors.ErrUserNotExists:
@@ -83,6 +87,11 @@ func (cmd FileRemove) Execute(args []string) error {
 	}
 
 	userName, folderName, fileName := args[0], args[1], args[2]
+
+	userName = strings.ToLower(userName)
+	folderName = strings.ToLower(folderName)
+	fileName = strings.ToLower(fileName)
+
 	if err := dao.RemoveFile(userName, folderName, fileName); err != nil {
 		switch err {
 		case errors.ErrUserNotExists:
@@ -143,6 +152,9 @@ func (cmd FilesList) Execute(args []string) error {
 	}
 
 	userName, folderName, sortOption, sortFlag := args[0], args[1], args[2], args[3]
+
+	userName = strings.ToLower(userName)
+	folderName = strings.ToLower(folderName)
 
 	sortedFiles, err := dao.GetFiles(userName, folderName, sortOption, sortFlag)
 	if err != nil {

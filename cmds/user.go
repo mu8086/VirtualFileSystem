@@ -7,6 +7,7 @@ import (
 	"VirtualFileSystem/errors"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func init() {
@@ -21,6 +22,8 @@ func (cmd UserCreate) Execute(args []string) error {
 	}
 
 	name := args[0]
+
+	name = strings.ToLower(name)
 
 	if err := dao.CreateUser(name); err != nil {
 		switch err {

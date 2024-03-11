@@ -29,6 +29,9 @@ func (cmd FolderCreate) Execute(args []string) error {
 		desc = args[2]
 	}
 
+	userName = strings.ToLower(userName)
+	folderName = strings.ToLower(folderName)
+
 	if err := dao.CreateFolder(userName, folderName, desc); err != nil {
 		switch err {
 		case errors.ErrUserNotExists:
@@ -84,6 +87,8 @@ func (cmd FoldersList) Execute(args []string) error {
 	}
 
 	userName, sortOption, sortFlag := args[0], args[1], args[2]
+
+	userName = strings.ToLower(userName)
 
 	sortedFolders, err := dao.GetFolders(userName, sortOption, sortFlag)
 	if err != nil {
@@ -147,6 +152,9 @@ func (cmd FolderRemove) Execute(args []string) error {
 
 	userName, folderName := args[0], args[1]
 
+	userName = strings.ToLower(userName)
+	folderName = strings.ToLower(folderName)
+
 	if err := dao.RemoveFolder(userName, folderName); err != nil {
 		switch err {
 		case errors.ErrUserNotExists:
@@ -197,6 +205,10 @@ func (cmd FolderRename) Execute(args []string) error {
 	}
 
 	userName, folderName, newFolderName := args[0], args[1], args[2]
+
+	userName = strings.ToLower(userName)
+	folderName = strings.ToLower(folderName)
+	newFolderName = strings.ToLower(newFolderName)
 
 	if err := dao.UpdateFolder(userName, folderName, newFolderName); err != nil {
 		switch err {
