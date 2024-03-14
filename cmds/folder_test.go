@@ -3,12 +3,18 @@ package cmds
 import (
 	"VirtualFileSystem/constants"
 	"VirtualFileSystem/errors"
+	"strings"
 	"testing"
 )
 
 func TestFolderCreate_Execute(t *testing.T) {
+	emptyStr := ""
+	userNameA := strings.ToLower("folderCreateUserA")
+	userNameB := strings.ToLower("folderCreateUserB")
+	folderName := strings.ToLower("folder1")
+
 	createUserCmd := Get(constants.UserCreateCmd)
-	createUserCmd.Execute([]string{"folderCreateUserA"})
+	createUserCmd.Execute([]string{userNameA})
 
 	type args struct {
 		args []string
@@ -29,35 +35,35 @@ func TestFolderCreate_Execute(t *testing.T) {
 		{
 			name: "username invalid",
 			args: args{
-				[]string{"", "folder1"},
+				[]string{emptyStr, folderName},
 			},
 			wantErr: errors.ErrUserName,
 		},
 		{
 			name: "foldername invalid",
 			args: args{
-				[]string{"folderCreateUserA", ""},
+				[]string{userNameA, emptyStr},
 			},
 			wantErr: errors.ErrFolderName,
 		},
 		{
 			name: "normal",
 			args: args{
-				[]string{"folderCreateUserA", "folder1", "description"},
+				[]string{userNameA, folderName, "description"},
 			},
 			wantErr: nil,
 		},
 		{
 			name: "user not exists",
 			args: args{
-				[]string{"folderCreateUserB", "folder1"},
+				[]string{userNameB, folderName},
 			},
 			wantErr: errors.ErrUserNotExists,
 		},
 		{
 			name: "folder exists",
 			args: args{
-				[]string{"folderCreateUserA", "folder1"},
+				[]string{userNameA, folderName},
 			},
 			wantErr: errors.ErrFolderExists,
 		},
@@ -72,13 +78,20 @@ func TestFolderCreate_Execute(t *testing.T) {
 }
 
 func TestFoldersList_Execute(t *testing.T) {
+	emptyStr := ""
+	userNameA := strings.ToLower("folderListUserA")
+	userNameB := strings.ToLower("folderListUserB")
+	userNameC := strings.ToLower("folderListUserC")
+	folderName1 := strings.ToLower("folder1")
+	folderName2 := strings.ToLower("folder2")
+
 	userCreateCmd := Get(constants.UserCreateCmd)
-	userCreateCmd.Execute([]string{"folderListUserA"})
-	userCreateCmd.Execute([]string{"folderListUserB"})
+	userCreateCmd.Execute([]string{userNameA})
+	userCreateCmd.Execute([]string{userNameB})
 
 	folderCreateCmd := Get(constants.FolderCreateCmd)
-	folderCreateCmd.Execute([]string{"folderListUserA", "folder2", "descritpion2"})
-	folderCreateCmd.Execute([]string{"folderListUserA", "folder1", "descritpion1"})
+	folderCreateCmd.Execute([]string{userNameA, folderName2, "descritpion2"})
+	folderCreateCmd.Execute([]string{userNameA, folderName1, "descritpion1"})
 
 	type args struct {
 		args []string
@@ -99,49 +112,49 @@ func TestFoldersList_Execute(t *testing.T) {
 		{
 			name: "username invalid",
 			args: args{
-				[]string{""},
+				[]string{emptyStr},
 			},
 			wantErr: errors.ErrUserName,
 		},
 		{
 			name: "normal with default sortOption, sortFlag",
 			args: args{
-				[]string{"folderListUserA"},
+				[]string{userNameA},
 			},
 			wantErr: nil,
 		},
 		{
 			name: "normal",
 			args: args{
-				[]string{"folderListUserA", "--sort-name", "desc"},
+				[]string{userNameA, constants.OptionSortByName, constants.FlagSortAsc},
 			},
 			wantErr: nil,
 		},
 		{
 			name: "user have no folder",
 			args: args{
-				[]string{"folderListUserB"},
+				[]string{userNameB},
 			},
 			wantErr: nil,
 		},
 		{
 			name: "user not exists",
 			args: args{
-				[]string{"folderListUserC"},
+				[]string{userNameC},
 			},
 			wantErr: errors.ErrUserNotExists,
 		},
 		{
 			name: "sort option invalid",
 			args: args{
-				[]string{"folderListUserA", "", "asc"},
+				[]string{userNameA, emptyStr, constants.FlagSortAsc},
 			},
 			wantErr: errors.ErrSortOption,
 		},
 		{
 			name: "sort flag invalid",
 			args: args{
-				[]string{"folderListUserA", "--sort-name", ""},
+				[]string{userNameA, constants.OptionSortByName, emptyStr},
 			},
 			wantErr: errors.ErrSortFlag,
 		},
@@ -156,11 +169,17 @@ func TestFoldersList_Execute(t *testing.T) {
 }
 
 func TestFolderRemove_Execute(t *testing.T) {
+	emptyStr := ""
+	userNameA := strings.ToLower("folderRemoveUserA")
+	userNameB := strings.ToLower("folderRemoveUserB")
+	folderName1 := strings.ToLower("folder1")
+	folderName2 := strings.ToLower("folder2")
+
 	userCreateCmd := Get(constants.UserCreateCmd)
-	userCreateCmd.Execute([]string{"folderRemoveUserA"})
+	userCreateCmd.Execute([]string{userNameA})
 
 	folderCreateCmd := Get(constants.FolderCreateCmd)
-	folderCreateCmd.Execute([]string{"folderRemoveUserA", "folder1", "descritpion1"})
+	folderCreateCmd.Execute([]string{userNameA, folderName1, "descritpion1"})
 
 	type args struct {
 		args []string
@@ -181,35 +200,35 @@ func TestFolderRemove_Execute(t *testing.T) {
 		{
 			name: "username invalid",
 			args: args{
-				[]string{"", "folder1"},
+				[]string{emptyStr, folderName1},
 			},
 			wantErr: errors.ErrUserName,
 		},
 		{
 			name: "foldername invalid",
 			args: args{
-				[]string{"folderRemoveUserA", ""},
+				[]string{userNameA, emptyStr},
 			},
 			wantErr: errors.ErrFolderName,
 		},
 		{
 			name: "normal",
 			args: args{
-				[]string{"folderRemoveUserA", "folder1"},
+				[]string{userNameA, folderName1},
 			},
 			wantErr: nil,
 		},
 		{
 			name: "user not exists",
 			args: args{
-				[]string{"folderRemoveUserB", "folder1"},
+				[]string{userNameB, folderName1},
 			},
 			wantErr: errors.ErrUserNotExists,
 		},
 		{
 			name: "folder not exists",
 			args: args{
-				[]string{"folderRemoveUserA", "folder2"},
+				[]string{userNameA, folderName2},
 			},
 			wantErr: errors.ErrFolderNotExists,
 		},
@@ -224,12 +243,19 @@ func TestFolderRemove_Execute(t *testing.T) {
 }
 
 func TestFolderRename_Execute(t *testing.T) {
+	emptyStr := ""
+	userNameA := strings.ToLower("folderRenameUserA")
+	userNameB := strings.ToLower("folderRenameUserB")
+	folderName1 := strings.ToLower("folder1")
+	folderName2 := strings.ToLower("folder2")
+	folderName3 := strings.ToLower("folder3")
+
 	userCreateCmd := Get(constants.UserCreateCmd)
-	userCreateCmd.Execute([]string{"folderRenameUserA"})
+	userCreateCmd.Execute([]string{userNameA})
 
 	folderCreateCmd := Get(constants.FolderCreateCmd)
-	folderCreateCmd.Execute([]string{"folderRenameUserA", "folder1"})
-	folderCreateCmd.Execute([]string{"folderRenameUserA", "folder2"})
+	folderCreateCmd.Execute([]string{userNameA, folderName1})
+	folderCreateCmd.Execute([]string{userNameA, folderName2})
 
 	type args struct {
 		args []string
@@ -250,49 +276,49 @@ func TestFolderRename_Execute(t *testing.T) {
 		{
 			name: "username invalid",
 			args: args{
-				[]string{"", "folder1", "folder3"},
+				[]string{emptyStr, folderName1, folderName3},
 			},
 			wantErr: errors.ErrUserName,
 		},
 		{
 			name: "foldername invalid",
 			args: args{
-				[]string{"folderRenameUserA", "", "folder3"},
+				[]string{userNameA, emptyStr, folderName3},
 			},
 			wantErr: errors.ErrFolderName,
 		},
 		{
 			name: "new foldername invalid",
 			args: args{
-				[]string{"folderRenameUserA", "folder1", ""},
+				[]string{userNameA, folderName1, emptyStr},
 			},
 			wantErr: errors.ErrFolderName,
 		},
 		{
 			name: "normal",
 			args: args{
-				[]string{"folderRenameUserA", "folder1", "folder3"},
+				[]string{userNameA, folderName1, folderName3},
 			},
 			wantErr: nil,
 		},
 		{
 			name: "user not exists",
 			args: args{
-				[]string{"folderRenameUserB", "folder1", "folder3"},
+				[]string{userNameB, folderName1, folderName3},
 			},
 			wantErr: errors.ErrUserNotExists,
 		},
 		{
 			name: "folder not exists",
 			args: args{
-				[]string{"folderRenameUserA", "folder1", "folder3"},
+				[]string{userNameA, folderName1, folderName3},
 			},
 			wantErr: errors.ErrFolderNotExists,
 		},
 		{
 			name: "new folder exists",
 			args: args{
-				[]string{"folderRenameUserA", "folder2", "folder3"},
+				[]string{userNameA, folderName2, folderName3},
 			},
 			wantErr: errors.ErrFolderExists,
 		},

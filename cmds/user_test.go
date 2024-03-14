@@ -2,10 +2,14 @@ package cmds
 
 import (
 	"VirtualFileSystem/errors"
+	"strings"
 	"testing"
 )
 
 func TestUserCreate_Execute(t *testing.T) {
+	emptyStr := ""
+	userNameA := strings.ToLower("userCreateUserA")
+
 	type args struct {
 		args []string
 	}
@@ -25,21 +29,21 @@ func TestUserCreate_Execute(t *testing.T) {
 		{
 			name: "username invalid",
 			args: args{
-				[]string{""},
+				[]string{emptyStr},
 			},
 			wantErr: errors.ErrUserName,
 		},
 		{
 			name: "normal",
 			args: args{
-				[]string{"userA"},
+				[]string{userNameA},
 			},
 			wantErr: nil,
 		},
 		{
 			name: "user exists",
 			args: args{
-				[]string{"userA"},
+				[]string{userNameA},
 			},
 			wantErr: errors.ErrUserExists,
 		},
