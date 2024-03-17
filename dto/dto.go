@@ -97,6 +97,7 @@ func (folders Folders) String() (s string) {
 func (folders Folders) Remove(folderName string) (Folders, error) {
 	for idx, folder := range folders {
 		if folder.Name == folderName {
+			folder.Files = nil
 			return append(folders[:idx], folders[idx+1:]...), nil
 		}
 	}
