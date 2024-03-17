@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	loadViper()
+	loadViper("local.toml")
 
 	fmt.Printf("%v\n", cmds.AvailableCmds())
 
@@ -28,47 +28,38 @@ func main() {
 	}
 }
 
-func loadViper() {
-	viper.SetConfigName("local")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath(".")
+func loadViper(configFile string) error {
+	viper.SetConfigFile(configFile)
 
 	err := viper.ReadInConfig()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "can not load viper configuration: %v", err)
-		return
+		return err
 	}
+	return nil
 }
 
-// TODO: implement error
-func parseCommand(input string) (string, []string, error) {
+func parseCommand(input string) (string, []string) {
 	fields := strings.Fields(input)
 	if len(fields) == 0 {
-		return "", nil, nil
+		return "", nil
 	}
-	return fields[0], fields[1:], nil
+	return fields[0], fields[1:]
 }
 
-func handleCommand(input string) {
-	cmdName, args, err := parseCommand(input)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v: %v\n", errors.ErrCmdParse, err)
-		return
-	} else if cmdName == "" { // empty line
-		return
+func handleCommand(input string) error {
+	cmdName, args := parseCommand(input)
+	if cmdName == "" { // empty line
+		return nil
 	}
 
 	cmd := cmds.Get(cmdName)
 	if cmd == nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", errors.ErrCmdNotExists)
-		return
+		return errors.ErrCmdNotExists
 	}
 
-	err = cmd.Execute(args)
-	if err != nil {
-		//fmt.Fprintf(os.Stderr, "command: '%v' encountered err: %v\n", cmdName, err)
-		return
-	}
+	return cmd.Execute(args)
 }
 
 func prompt() {
