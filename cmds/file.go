@@ -46,7 +46,7 @@ func (cmd FileCreate) Execute(args []string) error {
 		return err
 	}
 
-	fmt.Fprintf(os.Stdout, "Create %v in %v / %v successfully.\n", fileName, userName, folderName)
+	fmt.Fprintf(os.Stdout, "Create %v in %v/%v successfully.\n", fileName, userName, folderName)
 	return nil
 }
 

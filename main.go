@@ -63,5 +63,5 @@ func handleCommand(input string) error {
 }
 
 func prompt() {
-	fmt.Fprintf(os.Stdout, ">> ")
+	fmt.Fprintf(os.Stdout, "# ")
 }
