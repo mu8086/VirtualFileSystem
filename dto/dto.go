@@ -13,10 +13,6 @@ type User struct {
 	Folders Folders
 }
 
-func (u User) String() string {
-	return fmt.Sprintf("[User: %v, Folders: %v]", u.Name, u.Folders)
-}
-
 type Folder struct {
 	CreatedAt   time.Time
 	Description string
@@ -31,10 +27,6 @@ func (f Folder) Get(fileName string) *File {
 		}
 	}
 	return nil
-}
-
-func (f Folder) String() string {
-	return fmt.Sprintf("[Folder: %v, Desc: %v, CreatedAt: %v, Files: %v]", f.Name, f.Description, f.CreatedAt, f.Files)
 }
 
 type Folders []*Folder
@@ -115,10 +107,6 @@ type File struct {
 	CreatedAt   time.Time
 	Description string
 	Name        string
-}
-
-func (f File) String() string {
-	return fmt.Sprintf("[File: %v, Desc: %v, createdAt: %v]", f.Name, f.Description, f.CreatedAt)
 }
 
 type Files []*File

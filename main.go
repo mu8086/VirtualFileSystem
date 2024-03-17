@@ -2,7 +2,6 @@ package main
 
 import (
 	"VirtualFileSystem/cmds"
-	"VirtualFileSystem/dao"
 	"VirtualFileSystem/errors"
 	"bufio"
 	"fmt"
@@ -56,12 +55,6 @@ func handleCommand(input string) {
 		fmt.Fprintf(os.Stderr, "%v: %v\n", errors.ErrCmdParse, err)
 		return
 	} else if cmdName == "" { // empty line
-		return
-	}
-
-	// TODO: remove
-	if cmdName == "all" {
-		fmt.Printf("all user: %v\n", dao.GetAllUsers())
 		return
 	}
 
