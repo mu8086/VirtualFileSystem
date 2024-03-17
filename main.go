@@ -8,9 +8,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 func main() {
+	loadViper()
+
 	fmt.Printf("%v\n", cmds.AvailableCmds())
 
 	lineScanner := bufio.NewScanner(os.Stdin)
@@ -22,6 +26,18 @@ func main() {
 	}
 	if err := lineScanner.Err(); err != nil {
 		fmt.Fprintf(os.Stderr, "reading standard input: %v\n", err)
+	}
+}
+
+func loadViper() {
+	viper.SetConfigName("local")
+	viper.SetConfigType("toml")
+	viper.AddConfigPath(".")
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "can not load viper configuration: %v", err)
+		return
 	}
 }
 
